@@ -1,10 +1,10 @@
-package grenzdebil.dashboard
+package grenzdebil.urls
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class DashboardApplicationTests {
+class UrlApplicationTests {
 
     @Test
     fun contextLoads() = Unit

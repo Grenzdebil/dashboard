@@ -1,39 +1,13 @@
-package grenzdebil.dashboard
+package grenzdebil.urls
 
 import grenzdebil.generated.tables.references.URL
 import grenzdebil.generated.tables.references.URL_TAG
 import grenzdebil.generated.tables.references.URL_URL_TAG
+import grenzdebil.urls.model.Url
+import grenzdebil.urls.model.UrlTag
 import org.jooq.DSLContext
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RestController
-
-@SpringBootApplication
-class DashboardApplication
-
-fun main(args: Array<String>) {
-    runApplication<DashboardApplication>(args = args)
-}
-
-@RestController
-class UrlCollectionController(val urlService: UrlService) {
-
-    @GetMapping("/url_collection")
-    fun getAll() = urlService.getAllUrls()
-
-    @GetMapping("/test")
-    fun test(): List<Url> = listOf(
-        Url("/url_collection", listOf()),
-        Url("google.de", listOf()),
-        Url("https://www.google.de", listOf())
-    )
-}
-
-data class Url(val url: String, val tags: List<UrlTag>)
-data class UrlTag(val name: String)
 
 @Service
 class UrlService(private val dsl: DSLContext) {
