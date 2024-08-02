@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 class DashboardApplication
 
 fun main(args: Array<String>) {
-    runApplication<DashboardApplication>(*args)
+    runApplication<DashboardApplication>(args = args)
 }
 
 @RestController
@@ -46,7 +46,7 @@ class UrlService(private val dsl: DSLContext) {
             .returning(URL.ID)
             .fetchOne()
 
-        val urlId = urlRecord?.id ?: throw IllegalStateException("Failed to insert URL")
+        val urlId = urlRecord?.id ?: checkNotNull(urlRecord?.id) { "Failed to insert URL" }
 
         url.tags.forEach { tag ->
             val tagRecord = dsl.insertInto(URL_TAG)
@@ -66,7 +66,6 @@ class UrlService(private val dsl: DSLContext) {
                 .set(URL_URL_TAG.TAG_ID, tagId)
                 .execute()
         }
-
     }
 
     fun getAllUrls(): List<Url> {
@@ -74,7 +73,7 @@ class UrlService(private val dsl: DSLContext) {
             .from(URL)
             .fetch()
             .map { record ->
-                val url = record.get(URL.URL_) ?: "default_url"  // Standardwert setzen
+                val url = record.get(URL.URL_) ?: "default_url" // Standardwert setzen
                 val tags = dsl.select(URL_TAG.NAME)
                     .from(URL_TAG)
                     .join(URL_URL_TAG).on(URL_TAG.ID.eq(URL_URL_TAG.TAG_ID))
@@ -85,6 +84,4 @@ class UrlService(private val dsl: DSLContext) {
                 Url(url, tags)
             }
     }
-
-
 }

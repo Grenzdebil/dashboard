@@ -1,9 +1,12 @@
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+
 plugins {
     id("org.springframework.boot") version "3.3.2"
     id("io.spring.dependency-management") version "1.1.6"
     kotlin("jvm") version "1.9.24"
     kotlin("plugin.spring") version "1.9.24"
     id("nu.studer.jooq") version "7.1"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
 }
 
 group = "grenzdebil"
@@ -15,8 +18,23 @@ java {
     }
 }
 
+ktlint {
+    version.set("0.47.1") // Setze die ktlint Version
+    android.set(false) // Falls du ein Android-Projekt hast, setze dies auf true
+    outputToConsole.set(true) // Gibt die Ausgabe in der Konsole aus
+    outputColorName.set("RED") // Farbige Ausgabe in der Konsole
+    reporters {
+        reporter(ReporterType.PLAIN)
+        reporter(ReporterType.CHECKSTYLE)
+    }
+    filter {
+        exclude("**/generated/**") // Schließt das generated-Package aus
+    }
+}
+
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
